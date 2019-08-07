@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Note Taker</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+  <div class="row">
+
+    <div class="col-12">
+
+      <div class="card">
+        <div class="card-header">
+          <h1>Type a note</h1>
+        </div>
+        <div class="card-body">
+          <form method="POST" role="form">
+
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" class="form-control" id="title">
+            </div>
+
+
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Subject</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+            <br>
+            <div class="text-left">
+              <button type="submit" class="btn btn-primary btn-md" id="add-btn"><span class="fa fa-fire"></span>
+                Save</button>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </form>
+  <!-- note subject-->
+  <!-- <h2>Type a Note</h2>
+    <div class="form-group">
+            <input class="form-control" type="text" placeholder="Note Title">
+
+            <label for="exampleFormControlTextarea1">Subject</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <--Save Button-->
+  <!-- <button type="button" class="btn btn-primary">Save</button>
+          </div>
+        </form> -->
+
+  <script type="text/javascript">
+    // Question: What does this code do?
+    $("#add-btn").on("click", function (event) {
+      event.preventDefault();
+      var newCharacter = {
+        name: $("#title").val().trim(),
+        role: $("#body").val().trim(),
+      };
+
+      // Question: What does this code do??
+      $.post("/api/post", newNote)
+        .then(function (data) {
+          console.log("add.html", data);
+          alert("Adding note...");
+        });
+    });
+  </script>
+</body>
+
+</html>

@@ -35,12 +35,12 @@ connection.connect(function (err) {
 
 // Displays a single character, or returns false
 app.get("/notes", function (req, res) {
-    res.sendFile(path.join(__dirname, "notes.html"));
+    res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
 app.get("/", function (req, res) {
-    console.log("This route was hit");
-    res.sendFile(path.join(__dirname, "index.html"));
+    console.log("The root route was hit");
+    res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 app.get("/api/test/:data", function (req, res) {
@@ -69,21 +69,46 @@ app.post("/api/data", function (req, res) {
     // req.body hosts is equal to the JSON post sent from the user
     // This works because of our body parsing middleware
     // worked with George on this portion
-    var newData = req.body;
+    /* var newData = req.body;
+
     var newSubject = newData.title;
     var notes = newData.body;
 
     console.log(newData);
 
-    /* connection.query(`INSERT INTO notes (Subject, body) VALUE "${newData.title}", "${newData.body}")`){
-        if (err) throw (err);
-    }; */
-    res.json(newData);
+    res.json(newData); */
+    console.log("app.post");
+    connection.query("INSERT INTO notes (title, subject) VALUES (?, ?)", [req.body.title, req.body.notes], function(
+        err,
+        result
+      ) {
+        if (err) {
+          // If an error occurred, send a generic server failure
+          return res.status(500).end();
+        }
+    
+        // Send back the ID of the new quote
+        res.json({ id: result.insertId });
+      });
+
 });
 
-
 // need to work on api delete & post
-
+app.delete("/api/notes/:id", function(req, res) {
+    console.log("app.delete");
+    connection.query("DELETE FROM notes WHERE id = ?", [req.params.id], function(err, result) {
+      if (err) {
+        // If an error occurred, send a generic server failure
+        return res.status(500).end();
+      }
+      else if (result.affectedRows === 0) {
+        // If no rows were changed, then the ID must not exist, so 404
+        return res.status(404).end();
+      }
+      res.status(200).end();
+  
+    });
+  });
 
 // Starts the server to begin listening
 // =============================================================
